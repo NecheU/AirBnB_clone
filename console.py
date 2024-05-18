@@ -48,6 +48,28 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** class doesn't exist **")
 
+    def do_destroy(self, line):
+        """Prints the string rep of an instance, class name and id"""
+        if line == "" or line is None:
+            print("** class name missing **")
+        else:
+            info = line.split(" ")
+            class_name = info[0]
+            if class_name in storage.classes():
+                if len(info) < 2:
+                    print("** instance id missing **")
+                else:
+                    class_id = info[1]
+                    key = f"{class_name}.{class_id}"
+                    if key not in storage.all():
+                        print("** no instance found **")
+                    else:
+                        del storage.all()[key]
+                        storage.save()
+                        return
+            else:
+                print("** class doesn't exist **")
+
     def do_quit(self, line):
         """Exits the program"""
         return True
@@ -63,4 +85,8 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    HBNBCommand().cmdloop()
+    if sys.stdin.isatty():
+        HBNBCommand().cmdloop()
+    else:
+        for line in sys.stdin:
+            HBNBCommand().onecmd(line.strip())
