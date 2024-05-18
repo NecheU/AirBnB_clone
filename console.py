@@ -8,6 +8,7 @@ import sys
 from models import storage
 from models import *
 
+
 class HBNBCommand(cmd.Cmd):
     """Console for the app using cmd module"""
     prompt = "(hbnb)"
