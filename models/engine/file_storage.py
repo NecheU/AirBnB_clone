@@ -4,7 +4,7 @@
 
 import os
 import json
-from models import *
+from models import base_model, user, state, amenity, place, review
 
 class FileStorage:
     """File Storage class for the project
@@ -58,11 +58,11 @@ class FileStorage:
 
         classes = {
             "BaseModel": BaseModel,
-            "User": User
-            "State": State
-            "City": City
-            "Amenity": Amenity
-            "Place": Place
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
             "Review": Review
         }
         return classes
