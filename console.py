@@ -26,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def do_show(self, line):
-        """Prints the string representation of an instance, class name and id"""
+        """Prints the string rep of an instance, class name and id"""
         if line == "" or line is None:
             print("** class name missing **")
         else:
