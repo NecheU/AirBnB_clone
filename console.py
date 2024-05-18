@@ -87,6 +87,7 @@ class HBNBCommand(cmd.Cmd):
 if __name__ == '__main__':
     if sys.stdin.isatty():
         HBNBCommand().cmdloop()
-#    else:
-#        for line in sys.stdin:
-#            HBNBCommand().onecmd(line.strip())
+    else:
+        my_cmd = HBNBCommand()
+        for line in sys.stdin:
+            my_cmd.onecmd(line.strip())
