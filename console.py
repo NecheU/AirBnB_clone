@@ -31,12 +31,12 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             info = line.split(" ")
-            if len(info) < 2:
-                print("** instance id missing **")
-            else:
-                class_name = info[0]
-                class_id = info[1]
-                if class_name in storage.classes():
+            class_name = info[0]
+            if class_name in storage.classes():
+                if len(info) < 2:
+                    print("** instance id missing **")
+                else:
+                    class_id = info[1]
                     key = f"{class_name}.{class_id}"
                     if key not in storage.all():
                         print("** no instance found **")
@@ -45,8 +45,8 @@ class HBNBCommand(cmd.Cmd):
                         new_inst = storage.classes()[class_name]()
                         print(new_inst)
                         return
-                else:
-                    print("** class doesn't exist **")
+            else:
+                print("** class doesn't exist **")
 
     def do_quit(self, line):
         """Exits the program"""
