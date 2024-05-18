@@ -11,7 +11,13 @@ class BaseModel:
     """Base model class
     """
     def __init__(self, *args, **kwargs):
-        """Initialization of the Base Model class"""
+        """Initialization of the Base Model class
+
+        Args:
+        *args: anonymous arguments
+        **kwargs: Keyword arguments
+
+        """
         if kwargs:
             for key, value in kwargs.items():
                 if key == '__class__':

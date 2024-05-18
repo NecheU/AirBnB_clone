@@ -8,7 +8,12 @@ from models import base_model
 
 
 class FileStorage:
-    """File Storage class for the project"""
+    """File Storage class for the project
+
+    file_path: file path of json file
+    objects: Ibjects of the project
+    """
+
     __file_path = "file.json"
     __objects = {}
 
@@ -39,3 +44,10 @@ class FileStorage:
                     module_name = self.class_dict[class_name]
                     del obj['__class__']
                     self.new(eval(f'{module_name}.{class_name}')(**obj))
+
+    def classes(self):
+        """returns a class"""
+        from models.base_model import BaseModel
+
+        classes = {"BaseModel": BaseModel}
+        return classes

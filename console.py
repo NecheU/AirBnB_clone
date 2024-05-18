@@ -2,6 +2,10 @@
 """Module for the console"""
 
 import cmd
+import os
+import re
+import sys
+from models import storage
 from models import *
 
 class HBNBCommand(cmd.Cmd):
@@ -9,18 +13,16 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb)"
 
     def do_create(self, line):
-        """Creates new instance of BaseModel"""
-        if len(line) < 2:
-            print("** class name missing **")
-        else:
-            arg = line.split()
-            print(f"{arg}")
-            if arg == BaseModel:
-                storage = base_model.BaseModel()
-                storage.save()
-                print(storage.id)
-            else:
+        """Creates a model if argument is valid"""
+        if line != "" or line is not None:
+            if line not in storage.classes():
                 print("** class doesn't exist **")
+            else:
+                obj_inst = storage.classes()[line]()
+                obj_inst.save()
+                print(obj_inst.id)
+        else:
+            print("** class name missing **")
 
     def do_quit(self, line):
         """Exits the program"""
