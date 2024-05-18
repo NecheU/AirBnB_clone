@@ -25,6 +25,28 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class name missing **")
 
+    def do_show(self, line):
+        """Prints the string representation of an instance, class name and id"""
+        if line == "" or line is None:
+            print("** class name missing **")
+        else:
+            info = line.split(" ")
+            if len(info) < 2:
+                print("** instance id missing **")
+            else:
+                class_name = info[0]
+                class_id = info[1]
+                if class_name in storage.classes():
+                    key = f"{class_name}.{class_id}"
+                    if key not in storage.all():
+                        print("** no instance found **")
+                    else:
+                        del storage.all()[key]
+                        storage.save()
+                        return
+                else:
+                    print("** class doesn't exist **")
+
     def do_quit(self, line):
         """Exits the program"""
         return True
