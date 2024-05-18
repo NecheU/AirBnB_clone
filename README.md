@@ -2,9 +2,9 @@
 Team_Project
 AirBnB_clone Project
 
-# First step: To Write a command line interpreter to manage the AirBnB objects
+## The Command LIne Interpreter
 
-The Command Line interpreter does this following functions for us
+The Command Line interpreter does this following functions:
 - Create a new object (ex: a new User or a new Place)
 - Retrieve an object from a file, a database etc…
 - Do operations on objects (count, compute stats, etc…)
