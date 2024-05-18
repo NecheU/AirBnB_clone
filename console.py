@@ -11,7 +11,7 @@ from models import *
 
 class HBNBCommand(cmd.Cmd):
     """Console for the app using cmd module"""
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
 
     def do_create(self, line):
         """Creates a model if argument is valid"""
@@ -41,8 +41,9 @@ class HBNBCommand(cmd.Cmd):
                     if key not in storage.all():
                         print("** no instance found **")
                     else:
-                        del storage.all()[key]
-                        storage.save()
+                        value = storage.all()[key]
+                        new_inst = storage.classes()[class_name]()
+                        print(new_inst)
                         return
                 else:
                     print("** class doesn't exist **")
