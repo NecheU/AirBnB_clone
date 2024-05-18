@@ -1,5 +1,12 @@
 #!/usr/bin/python3
-"""Module for the basemodel"""
+"""
+Module for the basemodel
+
+
+classes:
+    BaseModel: Parent class of the project
+
+"""
 
 
 import uuid
@@ -8,7 +15,10 @@ import models
 
 
 class BaseModel:
-    """Base model class
+    """
+    Base model class
+
+
     """
     def __init__(self, *args, **kwargs):
         """Initialization of the Base Model class
@@ -16,6 +26,11 @@ class BaseModel:
         Args:
         *args: anonymous arguments
         **kwargs: Keyword arguments
+
+        Attributes:
+        id (str) : uuid4 assigned to the class
+        created_at (dateteime) : Current date and time of instance
+        updated_at (dateteime) : Current date and time of instance
 
         """
         if kwargs:

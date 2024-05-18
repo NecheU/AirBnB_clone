@@ -4,8 +4,7 @@
 
 import os
 import json
-from models import base_model
-
+from models import *
 
 class FileStorage:
     """File Storage class for the project
@@ -17,7 +16,9 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    class_dict = {"BaseModel": "base_model"}
+    class_dict = {"BaseModel": "base_model", "User": "user",
+                  "State": "state", "Amenity": "amenity",
+                  "Place": "place", "Review": "review"}
 
     def all(self):
         """ returns the dictionary __objects """
@@ -48,6 +49,20 @@ class FileStorage:
     def classes(self):
         """returns a class"""
         from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
 
-        classes = {"BaseModel": BaseModel}
+        classes = {
+            "BaseModel": BaseModel,
+            "User": User
+            "State": State
+            "City": City
+            "Amenity": Amenity
+            "Place": Place
+            "Review": Review
+        }
         return classes
