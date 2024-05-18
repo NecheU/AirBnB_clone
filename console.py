@@ -83,6 +83,13 @@ class HBNBCommand(cmd.Cmd):
         pass
         # return False
 
+    def precmd(self, line):
+        """Handles precommand"""
+        if not sys.stdin.isatty():
+            line = line.strip()
+            print()
+        return line
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
