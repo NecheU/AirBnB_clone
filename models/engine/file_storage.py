@@ -6,6 +6,7 @@ import os
 import json
 from models import base_model, user, state, amenity, place, review
 
+
 class FileStorage:
     """File Storage class for the project
 
