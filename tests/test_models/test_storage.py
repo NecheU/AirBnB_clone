@@ -26,6 +26,6 @@ class TestUser(unittest.TestCase):
 
     def test_recreate_class_from_dict(self):
         pass
-    
+
     def test_exception(self):
         pass

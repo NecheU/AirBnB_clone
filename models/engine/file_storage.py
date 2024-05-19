@@ -5,7 +5,7 @@
 
 import os
 import json
-from models import base_model, user, state, amenity, place, review
+from models import base_model, user, state, city, amenity, place, review
 
 
 class FileStorage:
@@ -19,8 +19,9 @@ class FileStorage:
     __objects = {}
 
     class_dict = {"BaseModel": "base_model", "User": "user",
-                  "State": "state", "Amenity": "amenity",
-                  "Place": "place", "Review": "review"}
+                  "City": "city", "State": "state",
+                  "Amenity": "amenity", "Place": "place",
+                  "Review": "review"}
 
     def all(self):
         """ returns the dictionary __objects """
