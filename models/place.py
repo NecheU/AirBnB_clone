@@ -2,8 +2,6 @@
 
 """ Module for the Place class
     and its method
-
-
 """
 
 from models.base_model import BaseModel

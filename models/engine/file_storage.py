@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Storage class Module"""
+"""Storage class Module
+"""
 
 
 import os

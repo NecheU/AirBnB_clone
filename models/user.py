@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 """User class for the project
-
-
 """
 
 
