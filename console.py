@@ -33,26 +33,21 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """Prints the string rep of an instance, class name and id"""
-        if line == "" or line is None:
+        args = line.split()
+        if not args:
             print("** class name missing **")
-        else:
-            info = line.split(" ")
-            class_name = info[0]
-            if class_name in storage.classes():
-                if len(info) < 2:
-                    print("** instance id missing **")
-                else:
-                    class_id = info[1]
-                    key = f"{class_name}.{class_id}"
-                    if key not in storage.all():
-                        print("** no instance found **")
-                    else:
-                        value = storage.all()[key]
-                        new_inst = storage.classes()[class_name]()
-                        print(new_inst)
-                        return
-            else:
-                print("** class doesn't exist **")
+            return
+        if args[0] not in storage.classes():
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        key = f"{args[0]}.{args[1]}"
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+        print(storage.all()[key])
 
     def do_destroy(self, line):
         """Prints the string rep of an instance, class name and id"""
