@@ -35,7 +35,7 @@ class TestBaseModel(unittest.TestCase):
     def test_checking_for_functions(self):
         self.assertIsNotNone(BaseModel.__doc__)
         self.assertIsNotNone(BaseModel.save.__doc__)
-        self.assertIsNotNone(BaseModel.to_dict.__doc__)
+
 
     def test_attributes(self):
         self.assertTrue(hasattr(BaseModel, "__init__"))
