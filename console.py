@@ -20,15 +20,16 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """Creates a model if argument is valid"""
-        if line != "" or line is not None:
-            if line not in storage.classes():
-                print("** class doesn't exist **")
-            else:
-                obj_inst = storage.classes()[line]()
-                obj_inst.save()
-                print(obj_inst.id)
-        else:
+        if not line:
             print("** class name missing **")
+            return
+        if line not in storage.classes():
+                print("** class doesn't exist **")
+                return
+        else:
+            obj_inst = storage.classes()[line]()
+            obj_inst.save()
+            print(obj_inst.id)
 
     def do_show(self, line):
         """Prints the string rep of an instance, class name and id"""
