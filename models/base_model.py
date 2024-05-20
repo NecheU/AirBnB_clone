@@ -54,7 +54,7 @@ class BaseModel:
         return f"[{class_name}] ({self.id}) {self.__dict__}"
 
     def save(self):
-        """Saves progress"""
+        """Saves progress of the updated_at attributte"""
         self.updated_at = datetime.now()
         models.storage.save()
 
