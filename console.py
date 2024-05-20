@@ -6,12 +6,17 @@ import os
 import re
 import sys
 from models import storage
-from models import *
-
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """Console for the app using cmd module"""
-    prompt = "(hbnb) "
+    prompt = '(hbnb) '
 
     def do_create(self, line):
         """Creates a model if argument is valid"""
