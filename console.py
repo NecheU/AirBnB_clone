@@ -14,6 +14,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+
 class HBNBCommand(cmd.Cmd):
     """Console for the app using cmd module"""
     prompt = '(hbnb) '
@@ -24,8 +25,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         if line not in storage.classes():
-                print("** class doesn't exist **")
-                return
+            print("** class doesn't exist **")
+            return
         else:
             obj_inst = storage.classes()[line]()
             obj_inst.save()
@@ -134,31 +135,41 @@ class HBNBCommand(cmd.Cmd):
         if class_name not in storage.classes():
             print("** class doesn't exist **")
             return
-        count = sum(1 for obj in storage.all().values() \
+        count = sum(1 for obj in storage.all().values()
                     if obj.__class__.__name__ == class_name)
         print(count)
 
     def default(self, line):
         """Handle <class name>.all() and <class name>.count()"""
         args = line.split('.')
-        if len(args) == 2:
-            class_name = args[0]
+        class_name = args[0]
+        if len(args) == 1:
+            print(f"*** Unknown syntax: {line}")
+            return
+        try:
             command = args[1]
             if command == "all()":
-                if (class_name in storage.classes() and
-                        issubclass(storage.classes()[class_name], BaseModel)):
-                    self.do_all(class_name)
-                else:
-                    print("** class doesn't exist **")
+                self.do_all(class_name)
             elif command == "count()":
-                if (class_name in storage.classes() and
-                        issubclass(storage.classes()[class_name], BaseModel)):
-                    self.do_count(class_name)
-                else:
-                    print("** class doesn't exist **")
+                self.do_count(class_name)
             else:
-                print(f"*** Unknown syntax: {line}")
-        else:
+                match = re.fullmatch(r'show\("(.+)"\)', command)
+                destroy_match = re.fullmatch(r'destroy\("(.+)"\)', command)
+                if match:
+                    obj_id = match.group(1)
+                    if class_name in storage.classes():
+                        self.do_show(f"{class_name} {obj_id}")
+                    else:
+                        print("** class doesn't exist **")
+                elif destroy_match:
+                    obj_id = destroy_match.group(1)
+                    if class_name in storage.classes():
+                        self.do_destroy(f"{class_name} {obj_id}")
+                    else:
+                        print("** class doesn't exist **")
+                else:
+                    print(f"*** Unknown syntax: {line}")
+        except IndexError:
             print(f"*** Unknown syntax: {line}")
 
 

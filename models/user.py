@@ -6,6 +6,7 @@
 from models.base_model import BaseModel
 import json
 
+
 class User(BaseModel):
     """
     Class that inherits from the BaseModel Parent Class
@@ -15,7 +16,6 @@ class User(BaseModel):
     password: Password
     first_name: First Name
     last_name: Last Name
-
     """
     email = ""
     password = ""
