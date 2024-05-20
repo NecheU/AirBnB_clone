@@ -133,6 +133,38 @@ class HBNBCommand(cmd.Cmd):
             print()
         return line
 
+    def do_count(self, class_name):
+        """Counts number of instance of a class"""
+        if class_name not in storage.classes():
+            print("** class doesn't exist **")
+            return
+        count = sum(1 for obj in storage.all().values() \
+                    if obj.__class__.__name__ == class_name)
+        print(count)
+
+    def default(self, line):
+        """Handle <class name>.all() and <class name>.count()"""
+        args = line.split('.')
+        if len(args) == 2:
+            class_name = args[0]
+            command = args[1]
+            if command == "all()":
+                if (class_name in storage.classes() and
+                        issubclass(storage.classes()[class_name], BaseModel)):
+                    self.do_all(class_name)
+                else:
+                    print("** class doesn't exist **")
+            elif command == "count()":
+                if (class_name in storage.classes() and
+                        issubclass(storage.classes()[class_name], BaseModel)):
+                    self.do_count(class_name)
+                else:
+                    print("** class doesn't exist **")
+            else:
+                print(f"*** Unknown syntax: {line}")
+        else:
+            print(f"*** Unknown syntax: {line}")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
