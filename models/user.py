@@ -4,14 +4,14 @@
 
 
 from models.base_model import BaseModel
-
+import json
 
 class User(BaseModel):
     """
     Class that inherits from the BaseModel Parent Class
 
-    Attributtes:
-    email: Emaill address
+    Attributes:
+    email: Email address
     password: Password
     first_name: First Name
     last_name: Last Name
