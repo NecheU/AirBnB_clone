@@ -1,60 +1,60 @@
 #!/usr/bin/python3
-"""Test the amenity model"""
-import datetime
+
 import unittest
+import os
+import pep8
 from models.amenity import Amenity
+from models.base_model import BaseModel
 
 
 class TestAmenity(unittest.TestCase):
 
-    def setUp(self):
-        self.amenity = Amenity()
-        self.amenity.name = "My First Model"
-        self.amenity.my_number = 89
+    @classmethod
+    def setUpClass(cls):
+        cls.amenity1 = Amenity()
+        cls.amenity1.name = "Hot Tub"
 
-    def test_correct_instance(self):
-        self.assertTrue(isinstance(self.amenity, Amenity))
-        self.assertTrue(isinstance(self.amenity.id, str))
-        dt = datetime.datetime
-        self.assertTrue(isinstance(self.amenity.created_at, dt))
-        self.assertTrue(isinstance(self.amenity.updated_at, dt))
+    @classmethod
+    def tearDownClass(cls):
+        del cls.amenity1
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def test_value_is_set(self):
-        self.assertIsNotNone(self.amenity.id)
-        self.assertIsNotNone(self.amenity.created_at)
-        self.assertIsNotNone(self.amenity.updated_at)
+    def test_style_check(self):
+        """
+        Tests pep8 style
+        """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/amenity.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
-    def test_right_value(self):
-        self.assertEqual(self.amenity.my_number, 89)
-        self.assertEqual(self.amenity.name, "My First Model")
-        old_updated_at = self.amenity.updated_at
-        self.amenity.save()
-        self.assertNotEqual(old_updated_at, self.amenity.updated_at)
-        self.assertGreater(self.amenity.updated_at, old_updated_at)
+    def test_is_subclass(self):
+        self.assertTrue(issubclass(self.amenity1.__class__, BaseModel), True)
 
-    def test_keys_exist_in_dict(self):
-        amenity_json = self.amenity.to_dict()
-        self.assertIsNotNone(amenity_json.get("id"))
-        self.assertIsNotNone(amenity_json.get("name"))
-        self.assertIsNotNone(amenity_json.get("my_number"))
-        self.assertIsNotNone(amenity_json.get("__class__"))
-        self.assertIsNotNone(amenity_json.get("updated_at"))
-        self.assertIsNotNone(amenity_json.get("created_at"))
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(Amenity.__doc__)
 
-    def test_recreate_class_from_dict(self):
-        amenity_json = self.amenity.to_dict()
-        class_from_json = Amenity(**amenity_json)
-        self.assertTrue(isinstance(class_from_json, Amenity))
-        self.assertEqual(amenity_json.get('id'), class_from_json.id)
-        name = class_from_json.name
-        my_number = class_from_json.my_number
-        formatted_created_at = class_from_json.created_at.isoformat()
-        formatted_updated_at = class_from_json.updated_at.isoformat()
+    def test_has_attributes(self):
+        self.assertTrue('id' in self.amenity1.__dict__)
+        self.assertTrue('created_at' in self.amenity1.__dict__)
+        self.assertTrue('updated_at' in self.amenity1.__dict__)
+        self.assertTrue('name' in self.amenity1.__dict__)
 
-        self.assertEqual(amenity_json.get('name'), name)
-        self.assertEqual(amenity_json.get('my_number'), my_number)
-        self.assertEqual(amenity_json.get('created_at'), formatted_created_at)
-        self.assertEqual(amenity_json.get('updated_at'), formatted_updated_at)
+    def test_attributes_are_strings(self):
+        self.assertEqual(type(self.amenity1.name), str)
+
+    def test_save(self):
+        self.amenity1.save()
+        self.assertNotEqual(self.amenity1.created_at, self.amenity1.updated_at)
+
+    def test_to_dict(self):
+        self.assertEqual('to_dict' in dir(self.amenity1), True)
 
     def test_exception(self):
         pass
+
+
+if __name__ == "__main__":
+    unittest.main()

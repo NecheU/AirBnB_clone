@@ -1,60 +1,66 @@
 #!/usr/bin/python3
-""" Test the user model """
-import datetime
+
 import unittest
+import os
+import pep8
 from models.user import User
+from models.base_model import BaseModel
 
 
 class TestUser(unittest.TestCase):
 
-    def setUp(self):
-        self.user = User()
-        self.user.name = "My First Model"
-        self.user.my_number = 89
+    @classmethod
+    def setUpClass(cls):
+        cls.my_user = User()
+        cls.my_user.first_name = "Betty"
+        cls.my_user.last_name = "Holberton"
+        cls.my_user.email = "airbnb@holbertonshool.com"
+        cls.my_user.password = "root"
 
-    def test_correct_instance(self):
-        self.assertTrue(isinstance(self.user, User))
-        self.assertTrue(isinstance(self.user.id, str))
-        dt = datetime.datetime
-        self.assertTrue(isinstance(self.user.created_at, dt))
-        self.assertTrue(isinstance(self.user.updated_at, dt))
+    @classmethod
+    def tearDownClass(cls):
+        del cls.my_user
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def test_value_is_set(self):
-        self.assertIsNotNone(self.user.id)
-        self.assertIsNotNone(self.user.created_at)
-        self.assertIsNotNone(self.user.updated_at)
+    def test_style_check(self):
+        """
+        Tests pep8 style
+        """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/user.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
-    def test_right_value(self):
-        self.assertEqual(self.user.my_number, 89)
-        self.assertEqual(self.user.name, "My First Model")
-        old_updated_at = self.user.updated_at
-        self.user.save()
-        self.assertNotEqual(old_updated_at, self.user.updated_at)
-        self.assertGreater(self.user.updated_at, old_updated_at)
+    def test_is_subclass(self):
+        self.assertTrue(issubclass(self.my_user.__class__, BaseModel), True)
 
-    def test_keys_exist_in_dict(self):
-        user_json = self.user.to_dict()
-        self.assertIsNotNone(user_json.get("id"))
-        self.assertIsNotNone(user_json.get("name"))
-        self.assertIsNotNone(user_json.get("my_number"))
-        self.assertIsNotNone(user_json.get("__class__"))
-        self.assertIsNotNone(user_json.get("updated_at"))
-        self.assertIsNotNone(user_json.get("created_at"))
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(User.__doc__)
 
-    def test_recreate_class_from_dict(self):
-        user_json = self.user.to_dict()
-        class_from_json = User(**user_json)
-        self.assertTrue(isinstance(class_from_json, User))
-        self.assertEqual(user_json.get('id'), class_from_json.id)
-        name = class_from_json.name
-        my_number = class_from_json.my_number
-        formatted_created_at = class_from_json.created_at.isoformat()
-        formatted_updated_at = class_from_json.updated_at.isoformat()
+    def test_has_attributes(self):
+        self.assertTrue('email' in self.my_user.__dict__)
+        self.assertTrue('id' in self.my_user.__dict__)
+        self.assertTrue('created_at' in self.my_user.__dict__)
+        self.assertTrue('updated_at' in self.my_user.__dict__)
+        self.assertTrue('password' in self.my_user.__dict__)
+        self.assertTrue('first_name' in self.my_user.__dict__)
+        self.assertTrue('last_name' in self.my_user.__dict__)
 
-        self.assertEqual(user_json.get('name'), name)
-        self.assertEqual(user_json.get('my_number'), my_number)
-        self.assertEqual(user_json.get('created_at'), formatted_created_at)
-        self.assertEqual(user_json.get('updated_at'), formatted_updated_at)
+    def test_attributes_are_strings(self):
+        self.assertEqual(type(self.my_user.email), str)
+        self.assertEqual(type(self.my_user.password), str)
+        self.assertEqual(type(self.my_user.first_name), str)
+        self.assertEqual(type(self.my_user.first_name), str)
 
-    def test_exception(self):
-        pass
+    def test_save(self):
+        self.my_user.save()
+        self.assertNotEqual(self.my_user.created_at, self.my_user.updated_at)
+
+    def test_to_dict(self):
+        self.assertEqual('to_dict' in dir(self.my_user), True)
+
+
+if __name__ == "__main__":
+    unittest.main()

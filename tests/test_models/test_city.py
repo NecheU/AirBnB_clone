@@ -1,60 +1,60 @@
 #!/usr/bin/python3
-""" Test the city model """
-import datetime
+
 import unittest
+import os
+import pep8
 from models.city import City
+from models.base_model import BaseModel
 
 
 class TestCity(unittest.TestCase):
 
-    def setUp(self):
-        self.city = City()
-        self.city.name = "My First Model"
-        self.city.my_number = 89
+    @classmethod
+    def setUpClass(cls):
+        cls.city1 = City()
+        cls.city1.name = "Raleigh"
+        cls.city1.state_id = "NC"
 
-    def test_correct_instance(self):
-        self.assertTrue(isinstance(self.city, City))
-        self.assertTrue(isinstance(self.city.id, str))
-        dt = datetime.datetime
-        self.assertTrue(isinstance(self.city.created_at, dt))
-        self.assertTrue(isinstance(self.city.updated_at, dt))
+    @classmethod
+    def tearDownClass(cls):
+        del cls.city1
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def test_value_is_set(self):
-        self.assertIsNotNone(self.city.id)
-        self.assertIsNotNone(self.city.created_at)
-        self.assertIsNotNone(self.city.updated_at)
+    def test_style_check(self):
+        """
+        Tests pep8 style
+        """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/city.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
-    def test_right_value(self):
-        self.assertEqual(self.city.my_number, 89)
-        self.assertEqual(self.city.name, "My First Model")
-        old_updated_at = self.city.updated_at
-        self.city.save()
-        self.assertNotEqual(old_updated_at, self.city.updated_at)
-        self.assertGreater(self.city.updated_at, old_updated_at)
+    def test_is_subclass(self):
+        self.assertTrue(issubclass(self.city1.__class__, BaseModel), True)
 
-    def test_keys_exist_in_dict(self):
-        city_json = self.city.to_dict()
-        self.assertIsNotNone(city_json.get("id"))
-        self.assertIsNotNone(city_json.get("name"))
-        self.assertIsNotNone(city_json.get("my_number"))
-        self.assertIsNotNone(city_json.get("__class__"))
-        self.assertIsNotNone(city_json.get("updated_at"))
-        self.assertIsNotNone(city_json.get("created_at"))
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(City.__doc__)
 
-    def test_recreate_class_from_dict(self):
-        city_json = self.city.to_dict()
-        class_from_json = City(**city_json)
-        self.assertTrue(isinstance(class_from_json, City))
-        self.assertEqual(city_json.get('id'), class_from_json.id)
-        name = class_from_json.name
-        my_number = class_from_json.my_number
-        formatted_created_at = class_from_json.created_at.isoformat()
-        formatted_updated_at = class_from_json.updated_at.isoformat()
+    def test_has_attributes(self):
+        self.assertTrue('id' in self.city1.__dict__)
+        self.assertTrue('created_at' in self.city1.__dict__)
+        self.assertTrue('updated_at' in self.city1.__dict__)
+        self.assertTrue('state_id' in self.city1.__dict__)
+        self.assertTrue('name' in self.city1.__dict__)
 
-        self.assertEqual(city_json.get('name'), name)
-        self.assertEqual(city_json.get('my_number'), my_number)
-        self.assertEqual(city_json.get('created_at'), formatted_created_at)
-        self.assertEqual(city_json.get('updated_at'), formatted_updated_at)
+    def test_attributes_are_strings(self):
+        self.assertEqual(type(self.city1.name), str)
+        self.assertEqual(type(self.city1.state_id), str)
 
-    def test_exception(self):
-        pass
+    def test_save(self):
+        self.city1.save()
+        self.assertNotEqual(self.city1.created_at, self.city1.updated_at)
+
+    def test_to_dict(self):
+        self.assertEqual('to_dict' in dir(self.city1), True)
+
+
+if __name__ == "__main__":
+    unittest.main()

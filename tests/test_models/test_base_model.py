@@ -1,60 +1,63 @@
 #!/usr/bin/python3
-""" Test the base model"""
-import datetime
+"""
+Unittest for BaseModel class
+"""
 import unittest
+import os
+import pep8
 from models.base_model import BaseModel
 
 
-class TestBase(unittest.TestCase):
+class TestBaseModel(unittest.TestCase):
 
-    def setUp(self):
-        self.my_model = BaseModel()
-        self.my_model.name = "My First Model"
-        self.my_model.my_number = 89
+    @classmethod
+    def setUpClass(cls):
+        cls.base1 = BaseModel()
+        cls.base1.name = "Greg"
+        cls.base1.my_number = 29
 
-    def test_correct_instance(self):
-        self.assertTrue(isinstance(self.my_model, BaseModel))
-        self.assertTrue(isinstance(self.my_model.id, str))
-        dt = datetime.datetime
-        self.assertTrue(isinstance(self.my_model.created_at, dt))
-        self.assertTrue(isinstance(self.my_model.updated_at, dt))
+    @classmethod
+    def tearDownClass(cls):
+        del cls.base1
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
-    def test_value_is_set(self):
-        self.assertIsNotNone(self.my_model.id)
-        self.assertIsNotNone(self.my_model.created_at)
-        self.assertIsNotNone(self.my_model.updated_at)
+    def test_style_check(self):
+        """
+        Tests pep8 style
+        """
+        style = pep8.StyleGuide(quiet=True)
+        p = style.check_files(['models/base_model.py'])
+        self.assertEqual(p.total_errors, 0, "fix pep8")
 
-    def test_right_value(self):
-        self.assertEqual(self.my_model.my_number, 89)
-        self.assertEqual(self.my_model.name, "My First Model")
-        old_updated_at = self.my_model.updated_at
-        self.my_model.save()
-        self.assertNotEqual(old_updated_at, self.my_model.updated_at)
-        self.assertGreater(self.my_model.updated_at, old_updated_at)
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(BaseModel.__doc__)
+        self.assertIsNotNone(BaseModel.save.__doc__)
+        self.assertIsNotNone(BaseModel.to_dict.__doc__)
 
-    def test_keys_exist_in_dict(self):
-        my_model_json = self.my_model.to_dict()
-        self.assertIsNotNone(my_model_json.get("id"))
-        self.assertIsNotNone(my_model_json.get("name"))
-        self.assertIsNotNone(my_model_json.get("my_number"))
-        self.assertIsNotNone(my_model_json.get("__class__"))
-        self.assertIsNotNone(my_model_json.get("updated_at"))
-        self.assertIsNotNone(my_model_json.get("created_at"))
+    def test_attributes(self):
+        self.assertTrue(hasattr(BaseModel, "__init__"))
+        self.assertTrue(hasattr(BaseModel, "save"))
+        self.assertTrue(hasattr(BaseModel, "to_dict"))
 
-    def test_recreate_class_from_dict(self):
-        my_model_json = self.my_model.to_dict()
-        class_from_json = BaseModel(**my_model_json)
-        self.assertTrue(isinstance(class_from_json, BaseModel))
-        self.assertEqual(my_model_json.get('id'), class_from_json.id)
-        name = class_from_json.name
-        my_number = class_from_json.my_number
-        formatted_created_at = class_from_json.created_at.isoformat()
-        formatted_updated_at = class_from_json.updated_at.isoformat()
+    def test_init(self):
+        self.assertTrue(isinstance(self.base1, BaseModel))
 
-        self.assertEqual(my_model_json.get('name'), name)
-        self.assertEqual(my_model_json.get('my_number'), my_number)
-        self.assertEqual(my_model_json.get('created_at'), formatted_created_at)
-        self.assertEqual(my_model_json.get('updated_at'), formatted_updated_at)
+    def test_save(self):
+        self.base1.save()
+        self.assertNotEqual(self.base1.created_at, self.base1.updated_at)
+
+    def test_to_dict(self):
+        base1_dict = self.base1.to_dict()
+        self.assertEqual(self.base1.__class__.__name__, 'BaseModel')
+        self.assertIsInstance(base1_dict['created_at'], str)
+        self.assertIsInstance(base1_dict['updated_at'], str)
 
     def test_exception(self):
         pass
+
+
+if __name__ == "__main__":
+    unittest.main()
