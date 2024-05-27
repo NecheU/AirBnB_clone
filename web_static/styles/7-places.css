@@ -1,12 +1,10 @@
 .places {
-    text-align: center;
-    
+    text-align: center;        
 }
 
 section.places h1 {
     font-size: 30px;
-    text-align: left;
-        
+    text-align: left;        
 }
 
 article {
